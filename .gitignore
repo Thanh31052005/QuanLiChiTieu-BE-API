@@ -1,0 +1,52 @@
+# VS Code
+.vscode/
+
+# =========================
+# Python / FastAPI
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# FastAPI logs
+*.log
+
+# Environment variables
+.env
+.env.*
+
+# Cache
+.pytest_cache/
+.mypy_cache/
+.cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# =========================
+# Models AI (thường rất nặng)
+# =========================
+*.pt
+*.pth
+*.onnx
+*.h5
+*.ckpt
+*.safetensors
+
+# =========================
+# Uploads
+# =========================
+uploads/
+temp/
+
+# =========================
+# OS
+# =========================
+Thumbs.db
+Desktop.ini
+.DS_Store
