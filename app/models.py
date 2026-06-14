@@ -11,7 +11,7 @@ Bảng:
 import uuid
 from datetime import datetime
 from sqlalchemy import (
-    Column, String, Integer, Boolean, Numeric, SmallInteger,
+    Column, String, Unicode, Integer, Boolean, Numeric, SmallInteger,
     DateTime, ForeignKey, UniqueConstraint
 )
 from sqlalchemy.orm import relationship
@@ -27,7 +27,7 @@ class User(Base):
     __tablename__ = "Users"
 
     UserId       = Column(String(36), primary_key=True, default=new_uuid)
-    FullName     = Column(String(100), nullable=False)
+    FullName     = Column(Unicode(100), nullable=False)
     Email        = Column(String(150), unique=True, nullable=False)
     PasswordHash = Column(String(255), nullable=False)
     CreatedAt    = Column(DateTime, default=datetime.utcnow)
@@ -43,7 +43,7 @@ class Category(Base):
     __tablename__ = "Categories"
 
     CategoryId   = Column(Integer, primary_key=True, autoincrement=True)
-    CategoryName = Column(String(100), nullable=False)
+    CategoryName = Column(Unicode(100), nullable=False)
     # BIT: True = Income (Thu), False = Expense (Chi)
     CategoryType = Column(Boolean, nullable=False)
     IconUrl      = Column(String(255), nullable=True)
@@ -57,8 +57,8 @@ class Jar(Base):
     __tablename__ = "Jars"
 
     JarId           = Column(String(36), primary_key=True, default=new_uuid)
-    JarName         = Column(String(100), nullable=False)
-    Description     = Column(String(255), nullable=True)
+    JarName         = Column(Unicode(100), nullable=False)
+    Description     = Column(Unicode(255), nullable=True)
     Budget          = Column(Numeric(18, 2), default=0)
     # TINYINT: 1 = Personal, 2 = Shared/Group
     JarType         = Column(SmallInteger, default=1)
@@ -98,7 +98,7 @@ class Transaction(Base):
     UserId          = Column(String(36), ForeignKey("Users.UserId"),       nullable=False)
     CategoryId      = Column(Integer,    ForeignKey("Categories.CategoryId"), nullable=False)
     Amount          = Column(Numeric(18, 2), nullable=False)
-    Description     = Column(String(500), nullable=True)
+    Description     = Column(Unicode(500), nullable=True)
     ReceiptImageUrl = Column(String(500), nullable=True)  # URL ảnh hóa đơn
     # BIT: True = Income (Thu), False = Expense (Chi)
     TransactionType = Column(Boolean, nullable=False)
