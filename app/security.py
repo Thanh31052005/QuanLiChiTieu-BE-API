@@ -13,6 +13,9 @@ from app.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
+# Quản lý phiên đăng nhập (In-memory) để phát hiện đăng nhập 2 máy
+active_sessions = {}
+
 
 # ── Password ─────────────────────────────────────────────────────────────────
 def hash_password(password: str) -> str:
@@ -52,4 +55,10 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     user = db.query(User).filter(User.UserId == user_id).first()
     if not user:
         raise HTTPException(status_code=401, detail="Người dùng không tồn tại")
+        
+    # Xử lý: Nếu người dùng đã đăng nhập ở máy khác (có token mới trong active_sessions)
+    if user_id in active_sessions:
+        if active_sessions[user_id] != token:
+            raise HTTPException(status_code=401, detail="Tài khoản đã được đăng nhập ở thiết bị khác. Vui lòng đăng nhập lại.")
+            
     return user

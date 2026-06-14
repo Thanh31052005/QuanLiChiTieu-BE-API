@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models import User
 from app.schemas import RegisterRequest, LoginRequest, TokenResponse, UserResponse, UpdateUserRequest
-from app.security import hash_password, verify_password, create_access_token, get_current_user
+from app.security import hash_password, verify_password, create_access_token, get_current_user, active_sessions
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -42,6 +42,10 @@ def login(body: LoginRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Email hoặc mật khẩu không đúng")
 
     token = create_access_token({"sub": user.UserId})
+    
+    # Lưu token này làm token kích hoạt duy nhất cho user này
+    active_sessions[user.UserId] = token
+    
     return TokenResponse(access_token=token, user=_map_user(user))
 
 
